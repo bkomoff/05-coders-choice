@@ -1,6 +1,11 @@
 defmodule Stratego.Game do
     
     def new_game() do
-        IO.puts "New Game Called\n"
+        %Stratego.Board.State{}
     end
+
+    def place_piece() do
+        
+    end
+
 end

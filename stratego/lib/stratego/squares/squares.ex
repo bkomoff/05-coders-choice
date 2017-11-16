@@ -18,7 +18,7 @@ defmodule Stratego.Squares do
         Agent.get( square_name({row,column}), fn square -> square end )
     end
 
-    defp square_name( {row, column} ) do
+    defp square_name({row, column}) do
         String.to_atom("Row#{row},Col#{column}")
     end
 
