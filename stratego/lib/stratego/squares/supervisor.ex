@@ -7,7 +7,6 @@ defmodule Stratego.Squares.Supervisor do
 
     def init( :no_args ) do
         children = 
-            # Spawn the sqaure workers
             for x <- squares() do
               worker( Stratego.Squares, [x], id: x )
             end

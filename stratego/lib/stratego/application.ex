@@ -6,7 +6,8 @@ defmodule Stratego.Application do
 
     children = 
     [
-      supervisor( Stratego.Squares.Supervisor, [], restart: :transient)
+      worker( Stratego.Game.Server, [], restart: :permanent ),
+      supervisor( Stratego.Squares.Supervisor, [], restart: :transient )
     ]
 
     opts = [strategy: :one_for_one, name: Stratego.Supervisor]

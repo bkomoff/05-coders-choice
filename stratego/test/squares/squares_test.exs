@@ -2,7 +2,7 @@ defmodule StrategoSqauresTest do
     use ExUnit.Case
     doctest Stratego.Squares
   
-    test "Verify all pieces have been placed" do
+    test "Verify all valid pieces have been placed" do
         Stratego.Squares.place_piece(:marshal, {1,7})
         assert %{piece: :marshal} === Stratego.Squares.get_square({1,7})
 
@@ -18,11 +18,11 @@ defmodule StrategoSqauresTest do
         Stratego.Squares.place_piece(:captain, {5,7})
         assert %{piece: :captain} === Stratego.Squares.get_square({5,7})
 
-        Stratego.Squares.place_piece(:lieutenants, {6,7})
-        assert %{piece: :lieutenants} === Stratego.Squares.get_square({6,7})
+        Stratego.Squares.place_piece(:lieutenant, {6,7})
+        assert %{piece: :lieutenant} === Stratego.Squares.get_square({6,7})
 
-        Stratego.Squares.place_piece(:sergeants, {7,7})
-        assert %{piece: :sergeants} === Stratego.Squares.get_square({7,7})
+        Stratego.Squares.place_piece(:sergeant, {7,7})
+        assert %{piece: :sergeant} === Stratego.Squares.get_square({7,7})
 
         Stratego.Squares.place_piece(:miner, {8,7})
         assert %{piece: :miner} === Stratego.Squares.get_square({8,7})
@@ -38,6 +38,10 @@ defmodule StrategoSqauresTest do
 
         Stratego.Squares.place_piece(:flag, {2,8})
         assert %{piece: :flag} === Stratego.Squares.get_square({2,8})
+    end
+
+    test "Verify that invalid piece cannot be placed" do
+        assert :invalid_piece === Stratego.Squares.place_piece(:soldier, {1,7})    
     end
 end
   
