@@ -4,11 +4,14 @@ defmodule StrategoGameTest do
 
     test "Create new game" do
         game = Stratego.Game.new_game()
-        assert game === %Stratego.Board.State{game_state: :initialize, turn: :human}
+        assert game === %Stratego.Game.State{game_state: :initialize, turn: :player_one}
     end
 
-    # test "Place piece on a square" do
-    # end
+     test "Place piece on a square" do
+        game = Stratego.Game.new_game()
+        Stratego.Game.place_piece( :flag, 2, 10 )
+        {:flag, :player_one} = Stratego.Sqaures.get_square({2,10})
+     end
 
     # test "Place all 40 pieces on the board" do
     # end
