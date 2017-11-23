@@ -14,6 +14,10 @@ defmodule Stratego.Squares do
         update_square( :empty, :no_one, square_name({column, row}))
     end
 
+    def place_piece( _, _, _ ) do
+        :invalid_piece
+    end
+
     def move_piece( player, {column, row}, direction) when direction in [:up] do
         from_square = get_square({column,row})
         piece = Map.get(from_square, :piece)
@@ -21,14 +25,26 @@ defmodule Stratego.Squares do
         update_square( :empty, :no_one, square_name{column,row})     
     end
 
-    # def move_piece( player, {column, row}, direction) when direction in [:left] do
-    # end
+    def move_piece( player, {column, row}, direction) when direction in [:left] do
+        from_square = get_square({column,row})
+        piece = Map.get(from_square, :piece)
+        update_square( piece, player, square_name{column,row-1})
+        update_square( :empty, :no_one, square_name{column,row})     
+    end
 
-    # def move_piece( player, {column, row}, direction) when direction in [:right] do
-    # end
+    def move_piece( player, {column, row}, direction) when direction in [:right] do
+        from_square = get_square({column,row})
+        piece = Map.get(from_square, :piece)
+        update_square( piece, player, square_name{column,row+1})
+        update_square( :empty, :no_one, square_name{column,row})     
+    end
 
-    # def move_piece( player, {column, row}, direction) when direction in [:down] do
-    # end
+    def move_piece( player, {column, row}, direction) when direction in [:down] do
+        from_square = get_square({column,row})
+        piece = Map.get(from_square, :piece)
+        update_square( piece, player, square_name{column-1,row})
+        update_square( :empty, :no_one, square_name{column,row})     
+    end
 
     def get_square({column, row}) do
         Agent.get( square_name({column, row}), fn square -> square end )
