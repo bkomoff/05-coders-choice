@@ -3,8 +3,6 @@ defmodule Stratego.Squares do
         Agent.start_link( fn -> %{piece: :empty, controlled_by: :no_one} end, name: square_name({column, row}) )
     end
 
-    # If I have time I should do a check to see if valid square and return a :invalid_square if
-    # outside of board is entered.
     def place_piece( player, piece, {column, row} ) do
         valid_piece?(piece)
         |> update_square(piece, player, square_name({column, row}))
