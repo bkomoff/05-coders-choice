@@ -5,9 +5,9 @@ defmodule Stratego.Game.Server do
         GenServer.start_link(__MODULE__, [], name: __MODULE__)
     end
 
-    def handle_call(:new_game, _from, state) do
-      game = Stratego.Game.new_game()
-      { :reply, self(), game }
+    def handle_call(:new_game, player, _from, state) do
+      game = Stratego.Game.new_game(player)
+      { :reply, game, state }
     end
 
     def handle_call(:view_board, _from, state) do
@@ -15,14 +15,14 @@ defmodule Stratego.Game.Server do
     end
     
 
-    def handle_call({:place_piece, player, piece, {row, column}}, _from, state) do
-        updated_game = Stratego.Game.place_piece(player, piece, {row, column})
+    def handle_call({:place_piece, player, piece, {column, row}}, _from, state) do
+        updated_game = Stratego.Game.place_piece(player, piece, {column, row})
         { :reply, updated_game, state }
     end
 
-    def handle_call({:move_piece, player, row, column, direction}, _from, state) do
-        updated_board = Stratego.Game.move_piece(player, row, column, direction)
-        { :reply, self(), updated_board }
+    def handle_call({:move_piece, player, {column, row}, direction}, _from, state) do
+        updated_board = Stratego.Game.move_piece(player, {column, row}, direction)
+        { :reply, updated_board, state }
     end
     
     

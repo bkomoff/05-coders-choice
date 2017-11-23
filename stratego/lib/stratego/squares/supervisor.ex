@@ -15,6 +15,6 @@ defmodule Stratego.Squares.Supervisor do
     end
 
     defp squares() do
-        for row <- 1..10, column <- 1..10, do: {row, column}        
+        for column <- 10..1, row <- 1..10, do: {column,row}        
     end
 end

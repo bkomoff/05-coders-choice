@@ -7,7 +7,6 @@ defmodule Stratego.Application do
     children = 
     [
       worker( Stratego.Game.Server, [], restart: :permanent ),
-      worker( Stratego.AI.Server, [], restart: :permanent ),
       supervisor( Stratego.Squares.Supervisor, [], restart: :transient )
     ]
 

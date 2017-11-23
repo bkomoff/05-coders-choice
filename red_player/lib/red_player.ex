@@ -1,18 +1,3 @@
 defmodule RedPlayer do
-  @moduledoc """
-  Documentation for RedPlayer.
-  """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> RedPlayer.hello
-      :world
-
-  """
-  def hello do
-    :world
-  end
+  defdelegate play(), to: RedPlayer.Impl
 end
