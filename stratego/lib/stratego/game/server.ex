@@ -13,17 +13,14 @@ defmodule Stratego.Game.Server do
     def handle_call(:view_board, _from, state) do
       { :reply, Stratego.Game.view_board(), state }
     end
-    
 
-    def handle_call({:place_piece, player, piece, {column, row}}, _from, state) do
-        updated_game = Stratego.Game.place_piece(player, piece, {column, row})
+    def handle_call({:place_piece, game, piece, {row, column}}, _from, state) do
+        updated_game = Stratego.Game.place_piece(game, piece, {row, column})
         { :reply, updated_game, state }
     end
 
-    def handle_call({:move_piece, player, {column, row}, direction}, _from, state) do
-        updated_board = Stratego.Game.move_piece(player, {column, row}, direction)
+    def handle_call({:move_piece, game, {row, column}, direction}, _from, state) do
+        updated_board = Stratego.Game.move_piece(game, {row, column}, direction)
         { :reply, updated_board, state }
     end
-    
-    
 end

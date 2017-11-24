@@ -1,17 +1,17 @@
 defmodule Stratego.Board do
 
     def print_board() do
-        for col <- 10..1, do: print_row(col)
+        for row <- 10..1, do: print_col(row)
     end    
 
-    defp print_row(col) do
-        for row <- 1..10, do: print_square(col,row)
+    defp print_col(row) do
+        for col <- 1..10, do: print_square(col,row)
         IO.puts "\n"
     end
 
     #Only print square that is either empty or owned by you everything else is a ?
-    defp print_square(col,row) do
-        Stratego.Squares.get_square({col,row})
+    defp print_square(row,col) do
+        Stratego.Squares.get_square({row,col})
         |> convert_for_display
         |> IO.write
     end

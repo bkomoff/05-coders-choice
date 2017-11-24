@@ -10,13 +10,13 @@ defmodule Stratego.Game.Client do
         GenServer.call(@server, :view_board)
     end
 
-    def place_piece(player, piece, {column, row}) do
-        GenServer.call(@server, {:place_piece, player, piece, {column, row}})
+    def place_piece(game, piece, {row, column}) do
+        GenServer.call(@server, {:place_piece, game, piece, {row, column}})
         |> place_piece_result(piece)
     end
 
-    def move_piece(player, {column, row}, direction) do
-        GenServer.call(@server, {:move_piece, player, {column, row}, direction})
+    def move_piece(game, {row, column}, direction) do
+        GenServer.call(@server, {:move_piece, game, {row, column}, direction})
     end
     
     defp place_piece_result(:ok, piece) do
