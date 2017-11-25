@@ -14,7 +14,7 @@ defmodule Stratego.Squares.Supervisor do
         supervise( children, strategy: :one_for_one )
     end
 
-    defp squares() do
+    def squares() do
         for row <- 1..10, column <- 1..10, do: {row, column}        
     end
 end

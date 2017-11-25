@@ -48,7 +48,8 @@ defmodule Stratego.Rules do
         :attacker_defeated
     end
 
-    def strike(attacker_piece, defender_piece) when attacker_piece in [:marshal, :general, :colonel, :major] and defender_piece in [:captain] do
+    def strike(attacker_piece, defender_piece) when attacker_piece in [:marshal, :general, :colonel, 
+                                                                       :major] and defender_piece in [:captain] do
         :defender_defeated
     end
 
@@ -56,7 +57,8 @@ defmodule Stratego.Rules do
         :attacker_defeated
     end
 
-    def strike(attacker_piece, defender_piece) when attacker_piece in [:marshal, :general, :colonel, :major, :captain] and defender_piece in [:lieutenant] do
+    def strike(attacker_piece, defender_piece) when attacker_piece in [:marshal, :general, :colonel, 
+                                                                       :major, :captain] and defender_piece in [:lieutenant] do
         :defender_defeated
     end
 

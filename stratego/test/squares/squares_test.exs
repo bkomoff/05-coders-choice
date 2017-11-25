@@ -41,7 +41,7 @@ defmodule StrategoSqauresTest do
     end
 
     test "Verify that invalid piece cannot be placed" do
-        assert :invalid_piece === Stratego.Squares.place_piece(:red, :soldier, {1,7})    
+        assert :piece_rejected === Stratego.Squares.place_piece(:red, :soldier, {1,7})    
     end
 end
   

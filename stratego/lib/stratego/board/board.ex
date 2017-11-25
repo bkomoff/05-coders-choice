@@ -5,7 +5,7 @@ defmodule Stratego.Board do
     end    
 
     defp print_col(row) do
-        for col <- 1..10, do: print_square(col,row)
+        for col <- 1..10, do: print_square(row,col)
         IO.puts "\n"
     end
 
@@ -21,9 +21,9 @@ defmodule Stratego.Board do
             %{ piece: :empty } -> " O "
             %{ piece: :marshal } -> " M "
             %{ piece: :general } -> " G "
-            %{ piece: :colonel } -> " C "
+            %{ piece: :colonel } -> " Co "
             %{ piece: :major } -> " M "
-            %{ piece: :captain } -> " C "
+            %{ piece: :captain } -> " Ca "
             %{ piece: :lieutenant } -> " L "
             %{ piece: :sergeant } -> " Se "
             %{ piece: :miner } -> " M "
