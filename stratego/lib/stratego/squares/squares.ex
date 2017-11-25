@@ -10,17 +10,19 @@ defmodule Stratego.Squares do
         |> update_square(piece, player, square_name({row, column}))
     end
 
-    def move_piece( player, from, to ) do
-        from_square = get_square(from)
-        piece = Map.get(from_square, :piece)
+    def move_piece( :attacker_defeated, _piece, _player, from, _to ) do
+        #Update square piece came from
+        update_square(:valid_piece, :empty, :no_one, square_name(from))
+    end
 
+    def move_piece( _, piece, player, from, to ) do
         #Update square piece is going to
         update_square(:valid_piece, piece, player, square_name(to))
 
         #Update square piece came from
         update_square(:valid_piece, :empty, :no_one, square_name(from))
     end
-
+    
     def get_square({row, column}) do
         Agent.get( square_name({row, column}), fn square -> square end )
     end

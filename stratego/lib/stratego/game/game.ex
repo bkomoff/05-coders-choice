@@ -48,12 +48,28 @@ defmodule Stratego.Game do
     end
         
     def move_piece(game = %{team: :red, game_state: state}, {row, column}, direction) when state in [:red_turn] do
-        Stratego.Squares.move_piece(:red, {row,column}, next_square(direction, {row,column}))
+        from_square = Stratego.Squares.get_square({row,column})
+        from_piece = Map.get(from_square, :piece)
+
+        to_square = Stratego.Squares.get_square(next_square(direction, {row,column}))
+        to_piece = Map.get(to_square, :piece)
+        
+        Stratego.Rules.strike(from_piece, to_piece)
+        |> Stratego.Squares.move_piece(from_piece, :red, {row,column}, next_square(direction, {row,column}))
+        
         %{game | game_state: :blue_turn} 
     end
 
     def move_piece(game = %{team: :blue, game_state: state}, {row, column}, direction) when state in [:blue_turn] do                         
-        Stratego.Squares.move_piece(:red, {row,column}, next_square(direction, {row,column}))
+        from_square = Stratego.Squares.get_square({row,column})
+        from_piece = Map.get(from_square, :piece)
+
+        to_square = Stratego.Squares.get_square(next_square(direction, {row,column}))
+        to_piece = Map.get(to_square, :piece)
+        
+        Stratego.Rules.strike(from_piece, to_piece)
+        |> Stratego.Squares.move_piece(from_piece, :blue, {row,column}, next_square(direction, {row,column}))
+        
         %{game | game_state: :red_turn} 
     end    
     
