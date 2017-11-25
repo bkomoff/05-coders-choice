@@ -1,7 +1,7 @@
 defmodule Stratego.Rules do
 
     @piece_hitpoints %{
-        marshall: 1, general: 2, colonel: 3, major: 4, captain: 5, lieutenant: 6, sergeant: 7, miner: 8, scout: 9, spy: 10 }
+        marshal: 1, general: 2, colonel: 3, major: 4, captain: 5, lieutenant: 6, sergeant: 7, miner: 8, scout: 9, spy: 10 }
 
     def strike(attacker_piece, defender_piece) when attacker_piece in [:miner] and defender_piece in [:bomb] do
         :defender_defeated

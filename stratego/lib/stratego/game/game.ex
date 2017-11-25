@@ -35,11 +35,11 @@ defmodule Stratego.Game do
         |> piece_placed(status, team, piece)
     end
 
-    defp piece_placed(game, status = :piece_accepted, team, piece) when team in [:red] do
+    defp piece_placed(game, status, team, piece) when team in [:red] and status in [:piece_accepted] do
         Map.put(game, :red_pieces, [ piece | game.red_pieces ])         
     end
 
-    defp piece_placed(game, status = :piece_accepted, team, piece) when team in [:blue] do
+    defp piece_placed(game, status = :piece_accepted, team, piece) when team in [:blue] and status in [:piece_accepted] do
         Map.put(game, :blue_pieces, [ piece | game.blue_pieces ])         
     end
 
