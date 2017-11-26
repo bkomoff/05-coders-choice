@@ -4,7 +4,12 @@ defmodule StrategoGameTest do
 
     test "Red Player Create Game" do
         game = Stratego.Game.new_game(:red)
-        assert game === %Stratego.Game.State{game_state: :initialize, team: :red}
+        assert game === %Stratego.Game.State{game_state: :initialize, red_team_state: :placing_piece}
+    end
+
+    test "Blue Player Create Game" do
+        game = Stratego.Game.new_game(:blue)
+        assert game === %Stratego.Game.State{game_state: :initialize, blue_team_state: :placing_piece}
     end
 
     test "Place piece on a square" do
@@ -63,14 +68,14 @@ defmodule StrategoGameTest do
 
     test "Other players turn" do
         game = Stratego.Game.new_game(:red)
-        assert game === %Stratego.Game.State{game_state: :initialize, team: :red}
+        assert game === %Stratego.Game.State{game_state: :initialize}
         Stratego.Game.place_piece(game,:scout,{2,3})
         assert %{piece: :scout, controlled_by: :red}  === Stratego.Squares.get_square({2,3})
 
         game = Map.put(game,:game_state, :red_turn)
         
         game = Stratego.Game.move_piece(game, {2,3}, :right)   
-        assert game === %Stratego.Game.State{game_state: :blue_turn, team: :red}     
+        assert game === %Stratego.Game.State{game_state: :blue_turn}     
     end
 
     test "Place all 40 pieces on the board" do

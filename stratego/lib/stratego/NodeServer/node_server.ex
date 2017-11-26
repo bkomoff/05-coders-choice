@@ -7,15 +7,19 @@ defmodule Stratego.NodeServer do
     def msg_receiver() do
         receive do
             { from, :new_game, player } ->
-            game = Stratego.Game.new_game(player)
+            game = Stratego.Game.Server.new_game( player)
             send from, {:ok, game}
 
-            { from, :place_piece, game, piece, {row, column} } ->
-            game = Stratego.Game.place_piece(game, piece, {row, column})
+            { from, :game_state } ->
+            game = Stratego.Game.Server.game_state()
+            send from, {:ok, game}
+
+            { from, :place_piece, player, piece, {row, column} } ->
+            game = Stratego.Game.Server.place_piece( player, piece, {row, column})
             send from, {:ok, game}            
 
             { from, :move_piece, game, {row, column}, direction } ->
-            game = Stratego.Game.move_piece( game, {row, column}, direction)
+            game = Stratego.Game.Server.move_piece( game, {row, column}, direction)
             send from, {:ok, game}
         end
 
