@@ -24,4 +24,8 @@ defmodule StrategoPlayer.Impl do
         send_to_game([:move_piece, game, {row,column}, direction])
     end
 
+    def game_state() do
+        send_to_game([:game_state])
+    end
+
 end
