@@ -3,9 +3,6 @@ defmodule Stratego.Game.State do
         game_state: :initialize, #red_turn / blue_turn / red_won / blue_won
         blue_team_state: :placing_pieces, # OR :ready_to_play
         red_team_state: :placing_pieces, # OR :ready_to_play
-        team: :blue, # or :red
-        red_pieces: [], # not sure if this is neccessary to keep track of pieces on board
-        blue_pieces: [], # not sure if this is neccessary to keep track of pieces on board
-        test_pieces: [] # not sure if this is neccessary to keep track of pieces on board
+        team: :blue # or :red
         )
 end

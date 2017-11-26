@@ -1,8 +1,38 @@
 defmodule Stratego.Game.Server do
     use GenServer
 
+    @name {:global, __MODULE__}
+
     def start_link() do
-        GenServer.start_link(__MODULE__, [], name: __MODULE__)
+      GenServer.start_link(__MODULE__, [], name: @name)
+    end
+
+    def new_game(player) do
+        GenServer.call(@name, {:new_game, player})
+    end
+
+    def view_board() do
+        GenServer.call(@name, :view_board)
+    end
+
+    def game_state() do
+        GenServer.call(@name, :game_state)
+    end
+
+    def retrieve_piece_list() do
+        GenServer.call(@name, :retrieve_piece_list)
+    end
+
+    def place_piece(game, piece, {row, column}) do
+        GenServer.call(@name, {:place_piece, game, piece, {row, column}})
+    end
+
+    def move_piece(game, {row, column}, direction) do
+        GenServer.call(@name, {:move_piece, game, {row, column}, direction})
+    end
+
+    def init() do
+      {:ok, Stratego.Game.new_game()}
     end
 
     def handle_call(:new_game, player, _from, _state) do
@@ -23,7 +53,7 @@ defmodule Stratego.Game.Server do
     end
 
     def handle_call({:place_piece, game, piece, {row, column}}, _from, state) do
-        updated_game = Stratego.Game.place_piece(state, piece, {row, column})
+        updated_game = Stratego.Game.place_piece(game, piece, {row, column})
         { :reply, updated_game, state }
     end
 

@@ -1,9 +1,9 @@
-defmodule RedPlayer.Mixfile do
+defmodule StrategoPlayer.Mixfile do
   use Mix.Project
 
   def project do
     [
-      app: :red_player,
+      app: :stratego_player,
       version: "0.1.0",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
@@ -21,7 +21,6 @@ defmodule RedPlayer.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:stratego, path: "../stratego"}
     ]
   end
 end

@@ -11,6 +11,7 @@ defmodule Stratego.Application do
     ]
 
     opts = [strategy: :one_for_one, name: Stratego.Supervisor]
+    Stratego.NodeServer.start_link()
     Supervisor.start_link(children, opts)
   end
 end
