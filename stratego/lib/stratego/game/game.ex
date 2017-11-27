@@ -42,35 +42,36 @@ defmodule Stratego.Game do
     end
         
     def move_piece(game = %{game_state: state}, {row, column}, direction) when state in [:red_turn] do
-        from_square = Stratego.Squares.get_square({row,column})
-        from_piece = Map.get(from_square, :piece)
+        update_squares(:red, {row,column}, direction)
 
-        to_square = Stratego.Squares.get_square(next_square(direction, {row,column}))
-        to_piece = Map.get(to_square, :piece)
-        
-        Stratego.Rules.strike(from_piece, to_piece)
-        |> Stratego.Squares.move_piece( from_piece, :red, {row,column}, next_square(direction, {row,column}))
-        
-        game 
+        game
         |> update_turn(:red)
     end
 
     def move_piece(game = %{game_state: state}, {row, column}, direction) when state in [:blue_turn] do
-        from_square = Stratego.Squares.get_square({row,column})
-        from_piece = Map.get(from_square, :piece)
+        update_squares(:blue, {row,column}, direction)
 
-        to_square = Stratego.Squares.get_square(next_square(direction, {row,column}))
-        to_piece = Map.get(to_square, :piece)
-        
-        Stratego.Rules.strike(from_piece, to_piece)
-        |> Stratego.Squares.move_piece( from_piece, :blue, {row,column}, next_square(direction, {row,column}))
-        
-        game 
+        game
         |> update_turn(:blue)
+    end
+
+    def move_piece(game = %{game_state: state}, _, _) when state in [:red_won, :blue_won] do
+        IO.puts "#{game.game_state}" 
     end
 
     def move_piece(_,_,_) do
         IO.puts "Not your turn to move!"
+    end
+
+    defp update_squares( player, location, direction) do
+        from_square = Stratego.Squares.get_square(location)
+        from_piece = Map.get(from_square, :piece)
+
+        to_square = Stratego.Squares.get_square(next_square(direction, location))
+        to_piece = Map.get(to_square, :piece)
+        
+        Stratego.Rules.strike(from_piece, to_piece)
+        |> Stratego.Squares.move_piece( from_piece, player, location, next_square(direction, location))                
     end
 
     defp update_turn(game = %{red_team_state: :ready_to_play, blue_team_state: :ready_to_play}, player) when player in [:red] do

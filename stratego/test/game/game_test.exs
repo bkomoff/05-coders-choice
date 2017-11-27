@@ -3,27 +3,29 @@ defmodule StrategoGameTest do
     doctest Stratego.Game
 
     test "Red Player Create Game" do
-        game = Stratego.Game.new_game(:red)
-        assert game === %Stratego.Game.State{game_state: :initialize, red_team_state: :placing_piece}
+        game = %Stratego.Game.State{game_state: :initialize, red_team_state: :not_joined}
+        game = Stratego.Game.new_game(game, :red)
+        assert game === %Stratego.Game.State{game_state: :initialize, red_team_state: :placing_pieces}
     end
 
     test "Blue Player Create Game" do
-        game = Stratego.Game.new_game(:blue)
-        assert game === %Stratego.Game.State{game_state: :initialize, blue_team_state: :placing_piece}
+        game = %Stratego.Game.State{game_state: :initialize, blue_team_state: :not_joined}
+        blue_game = Stratego.Game.new_game(game, :blue)
+        assert blue_game === %Stratego.Game.State{game_state: :initialize, blue_team_state: :placing_pieces}
     end
 
     test "Place piece on a square" do
-        game = Stratego.Game.new_game(:red)
-        Stratego.Game.place_piece( game, :flag, {2, 10} )
+        Stratego.Game.Server.place_piece( :red, :flag, {2, 10} )
         assert %{piece: :flag, controlled_by: :red}  === Stratego.Squares.get_square({2,10})
     end
 
     test "Move a piece from one square to another up direction" do
-        game = Stratego.Game.new_game(:red)
-        Stratego.Game.place_piece(game,:scout,{1,1})
+        Stratego.Game.place_piece(:red,:scout,{1,1})
         assert %{piece: :scout, controlled_by: :red}  === Stratego.Squares.get_square({1,1})
-    
-        game = Map.put(game,:game_state, :red_turn)
+
+        game = %Stratego.Game.State{}
+        game = Stratego.Game.player_ready(game, :red)
+        game = Stratego.Game.player_ready(game, :blue)
 
         Stratego.Game.move_piece(game, {1,1}, :up)   
         assert %{piece: :empty, controlled_by: :no_one}  === Stratego.Squares.get_square({1,1})
@@ -32,11 +34,12 @@ defmodule StrategoGameTest do
     end
 
     test "Move a piece from one square to another down direction" do
-        game = Stratego.Game.new_game(:red)
-        Stratego.Game.place_piece(game,:scout,{3,3})
+        Stratego.Game.place_piece(:red,:scout,{3,3})
         assert %{piece: :scout, controlled_by: :red}  === Stratego.Squares.get_square({3,3})
     
-        game = Map.put(game,:game_state, :red_turn)
+        game = %Stratego.Game.State{}
+        game = Stratego.Game.player_ready(game, :red)
+        game = Stratego.Game.player_ready(game, :blue)
 
         Stratego.Game.move_piece(game, {3,3}, :down)   
         assert %{piece: :empty, controlled_by: :no_one}  === Stratego.Squares.get_square({3,3})
@@ -44,22 +47,25 @@ defmodule StrategoGameTest do
     end
 
     test "Move a piece from one square to another left direction" do
-        game = Stratego.Game.new_game(:red)
-        Stratego.Game.place_piece(game,:scout,{3,3})
+        Stratego.Game.place_piece(:red,:scout,{3,3})
         assert %{piece: :scout, controlled_by: :red}  === Stratego.Squares.get_square({3,3})
     
-        game = Map.put(game,:game_state, :red_turn)
+        game = %Stratego.Game.State{}
+        game = Stratego.Game.player_ready(game, :red)
+        game = Stratego.Game.player_ready(game, :blue)
 
         Stratego.Game.move_piece(game, {3,3}, :left)   
         assert %{piece: :empty, controlled_by: :no_one}  === Stratego.Squares.get_square({3,3})
         assert %{piece: :scout, controlled_by: :red}  === Stratego.Squares.get_square({3,2})
     end
+
     test "Move a piece from one square to another right direction" do
-        game = Stratego.Game.new_game(:red)
-        Stratego.Game.place_piece(game,:scout,{3,3})
+        Stratego.Game.place_piece(:red,:scout,{3,3})
         assert %{piece: :scout, controlled_by: :red}  === Stratego.Squares.get_square({3,3})
     
-        game = Map.put(game,:game_state, :red_turn)
+        game = %Stratego.Game.State{}
+        game = Stratego.Game.player_ready(game, :red)
+        game = Stratego.Game.player_ready(game, :blue)
 
         Stratego.Game.move_piece(game, {3,3}, :right)   
         assert %{piece: :empty, controlled_by: :no_one}  === Stratego.Squares.get_square({3,3})
@@ -67,48 +73,41 @@ defmodule StrategoGameTest do
     end
 
     test "Other players turn" do
-        game = Stratego.Game.new_game(:red)
-        assert game === %Stratego.Game.State{game_state: :initialize}
-        Stratego.Game.place_piece(game,:scout,{2,3})
+        Stratego.Game.place_piece(:red,:scout,{2,3})
         assert %{piece: :scout, controlled_by: :red}  === Stratego.Squares.get_square({2,3})
 
-        game = Map.put(game,:game_state, :red_turn)
+        game = %Stratego.Game.State{}
+        game = Stratego.Game.player_ready(game, :red)
+        game = Stratego.Game.player_ready(game, :blue)
         
         game = Stratego.Game.move_piece(game, {2,3}, :right)   
-        assert game === %Stratego.Game.State{game_state: :blue_turn}     
+        assert game === %Stratego.Game.State{game_state: :blue_turn, blue_team_state: :ready_to_play, red_team_state: :ready_to_play}     
     end
 
-    test "Place all 40 pieces on the board" do
-        game = Stratego.Game.new_game(:red)
-        
-    end
+    test "marshal attacks and defeats general" do       
+        Stratego.Game.place_piece(:red,:marshal,{1,8})
+        Stratego.Game.place_piece(:blue,:general,{2,8})
 
-    test "marshal attacks and defeats general" do
-        red_player  = Stratego.Game.new_game(:red)
-        blue_player = Stratego.Game.new_game(:blue)
-        
-        Stratego.Game.place_piece(red_player,:marshal,{1,1})
-        Stratego.Game.place_piece(blue_player,:general,{2,1})
+        game = %Stratego.Game.State{}
+        game = Stratego.Game.player_ready(game, :red)
+        game = Stratego.Game.player_ready(game, :blue)
 
-        red_player = Map.put(red_player, :game_state, :red_turn)
-
-        Stratego.Game.move_piece(red_player, {1,1}, :up)
-        assert %{piece: :empty, controlled_by: :no_one}  === Stratego.Squares.get_square({1,1})
-        assert %{piece: :marshal, controlled_by: :red}  === Stratego.Squares.get_square({2,1})
+        Stratego.Game.move_piece(game, {1,8}, :up)
+        assert %{piece: :empty, controlled_by: :no_one}  === Stratego.Squares.get_square({1,8})
+        assert %{piece: :marshal, controlled_by: :red}  === Stratego.Squares.get_square({2,8})
     end
     
     test "flag is captured" do
-        red_player  = Stratego.Game.new_game(:red)
-        blue_player = Stratego.Game.new_game(:blue)
-        
-        Stratego.Game.place_piece(red_player,:marshal,{1,1})
-        Stratego.Game.place_piece(blue_player,:flag,{2,1})
+        Stratego.Game.place_piece(:red,:marshal,{1,9})
+        Stratego.Game.place_piece(:blue,:flag,{2,9})
 
-        red_player = Map.put(red_player, :game_state, :red_turn)
+        game = %Stratego.Game.State{}
+        game = Stratego.Game.player_ready(game, :red)
+        game = Stratego.Game.player_ready(game, :blue)
 
-        Stratego.Game.move_piece(red_player, {1,1}, :up)
-        assert %{piece: :empty, controlled_by: :no_one}  === Stratego.Squares.get_square({1,1})
-        assert %{piece: :marshal, controlled_by: :red}  === Stratego.Squares.get_square({2,1})
+        Stratego.Game.move_piece(game, {1,9}, :up)
+        assert %{piece: :empty, controlled_by: :no_one}  === Stratego.Squares.get_square({1,9})
+        assert %{piece: :marshal, controlled_by: :red}  === Stratego.Squares.get_square({2,9})
     end
     
 end
