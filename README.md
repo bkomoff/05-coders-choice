@@ -13,8 +13,9 @@ Start Blue Player (Terminal 3):
 iex --sname <<blue node name>> --cookie game -S mix
 
 Here are commands you can use:
-StrategoPlayer.Impl.play(:blue or :red) This lets the server and other player know someone is connected
-StrategoPlayer.Impl.player_ready(:blue or :red) This lets the server and other player know you are done placing pieces
-StrategoPlayer.Impl.place_piece(<<player>>,<<piece>>,{x,y}) piece: :marshal, :general, :colonel, :major, :captain, :lieutenant, :sergeant, :miner, :scout, :spy, :bomb, :flag
-StrategoPlayer.Impl.move_piece({x,y},<<direction>>) direction: :up, :down, :left, :right
-StrategoPlayer.Impl.print_board This will print out the positions of both players pieces
+StrategoPlayer.connect(<node name>)
+StrategoPlayer.play(:blue or :red) This lets the server and other player know someone is connected
+StrategoPlayer.player_ready(:blue or :red) This lets the server and other player know you are done placing pieces
+StrategoPlayer.place_piece(<<player>>,<<piece>>,{x,y}) piece: :marshal, :general, :colonel, :major, :captain, :lieutenant, :sergeant, :miner, :scout, :spy, :bomb, :flag
+StrategoPlayer.move_piece({x,y},<<direction>>) direction: :up, :down, :left, :right
+StrategoPlayer.print_board This will print out the positions of both players pieces

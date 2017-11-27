@@ -1,6 +1,6 @@
 defmodule StrategoPlayer.Impl do
     def connect(game_node) do
-        Node.connect(game_node)
+        Node.connect(game_node) 
         :global.sync()
     end
 
@@ -18,18 +18,21 @@ defmodule StrategoPlayer.Impl do
 
     def player_ready(player) do
         send_to_game([:player_ready, player])
+        StrategoPlayer.Board.print_board()
     end
 
-    def place_piece( player, piece, {row,column}) do
+    def place_piece( player, piece, row, column) do
         send_to_game([:place_piece, player, piece, {row,column}])
+        StrategoPlayer.Board.print_board()
     end
 
-    def get_square({row,column}) do
+    def get_square(row, column) do
         send_to_game([:get_square, {row,column}])
     end
 
-    def move_piece({row,column}, direction) do
+    def move_piece(row, column, direction) do
         send_to_game([:move_piece, {row,column}, direction])
+        StrategoPlayer.Board.print_board()
     end
 
     def game_state() do

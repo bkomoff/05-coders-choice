@@ -1,4 +1,14 @@
-defmodule Stratego.Board do
+defmodule StrategoPlayer.Board do
+
+    # Suggestion from my 2nd sanity check, Thank you!
+    @piece_type_to_human %{marshal: " Ma ", general: " G ", colonel: " Co ", major: " Ma ", captain: " C ",
+                           lieutenant: " L ", sergeant: " Se ", miner: " Mi ", scout: " Sc ", spy: " Sp ",
+                           bomb: " B ", flag: " F "}
+
+    @piece_types Map.keys(@piece_type_to_human)
+
+    def piece_atom_to_string(type), do: Map.get(@piece_type_to_human, type, " O ")
+    def piece_atom_to_string(), do: @piece_types
 
     def print_board() do
         for row <- 10..1, do: print_col(row)
@@ -9,28 +19,9 @@ defmodule Stratego.Board do
         IO.puts "\n"
     end
 
-    #Only print square that is either empty or owned by you everything else is a ?
     defp print_square(row,col) do
-        StrategoPlayer.Impl.get_square({row,col})
-        |> convert_for_display
+        Map.get(StrategoPlayer.get_square(row,col), :piece)
+        |> piece_atom_to_string
         |> IO.write
-    end
-
-    defp convert_for_display(square_state) do
-        case square_state do
-            %{ piece: :empty } -> " O "
-            %{ piece: :marshal } -> " M "
-            %{ piece: :general } -> " G "
-            %{ piece: :colonel } -> " Co "
-            %{ piece: :major } -> " M "
-            %{ piece: :captain } -> " Ca "
-            %{ piece: :lieutenant } -> " L "
-            %{ piece: :sergeant } -> " Se "
-            %{ piece: :miner } -> " M "
-            %{ piece: :scout } -> " Sc "
-            %{ piece: :spy } -> " Sp "
-            %{ piece: :bomb } -> " B "
-            %{ piece: :flag } -> " F "
-        end
     end
 end
