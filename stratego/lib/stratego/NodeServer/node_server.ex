@@ -19,7 +19,7 @@ defmodule Stratego.NodeServer do
             send from, {:ok, game}
 
             { from, :get_square, {row, column} } ->
-            result = Stratego.Game.Server.get_square({row, column})
+            result = Stratego.Game.Server.get_square({row,column})
             send from, {:ok, result}
 
             { from, :place_piece, player, piece, {row, column} } ->

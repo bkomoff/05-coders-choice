@@ -1,5 +1,4 @@
 defmodule Stratego.Squares do
-
     def start_link( {row, column} ) do
         Agent.start_link( fn -> empty_square() end, name: square_name({row, column}) )
     end
@@ -13,6 +12,16 @@ defmodule Stratego.Squares do
     def move_piece( :attacker_defeated, _piece, _player, from, _to ) do
         #Update square piece came from
         update_square(:valid_piece, :empty, :no_one, square_name(from))
+    end
+
+    def move_piece( :flag_captured, piece, player, from, to ) do
+        #Update square piece is going to
+        update_square(:valid_piece, piece, player, square_name(to))
+
+        #Update square piece came from
+        update_square(:valid_piece, :empty, :no_one, square_name(from))
+
+        :flag_captured
     end
 
     def move_piece( _, piece, player, from, to ) do
@@ -43,8 +52,7 @@ defmodule Stratego.Squares do
     end
 
     defp update_square( :valid_piece, piece, player, square ) do
-        Agent.update( square, fn s -> %{ piece: piece, controlled_by: player }  end )        
-        :piece_accepted
+        Agent.update( square, fn _s -> %{ piece: piece, controlled_by: player }  end )        
     end
 
     defp update_square( :invalid_piece, _piece, _player, _square ) do

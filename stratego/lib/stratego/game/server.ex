@@ -16,7 +16,7 @@ defmodule Stratego.Game.Server do
     end
 
     def get_square({row,column}) do
-        GenServer.call(@name, {:get_square, {row,column}})
+        GenServer.call(@name, {:get_square, {row, column}})
     end
 
     def game_state() do
@@ -47,8 +47,8 @@ defmodule Stratego.Game.Server do
       { :reply, update_state, update_state }
     end
 
-    def handle_call({:get_square, {row,column}}, _from, state) do
-      { :reply, Stratego.Game.get_square({row,column}), state }
+    def handle_call({:get_square, {row, column}}, _from, state) do
+      { :reply, Stratego.Game.get_square({row, column}), state }
     end
 
     def handle_call({:place_piece, player, piece, {row, column}}, _from, state) do

@@ -97,7 +97,7 @@ defmodule StrategoGameTest do
         assert %{piece: :marshal, controlled_by: :red}  === Stratego.Squares.get_square({2,8})
     end
     
-    test "flag is captured" do
+    test "flag is captured by red" do
         Stratego.Game.place_piece(:red,:marshal,{1,9})
         Stratego.Game.place_piece(:blue,:flag,{2,9})
 
@@ -105,9 +105,11 @@ defmodule StrategoGameTest do
         game = Stratego.Game.player_ready(game, :red)
         game = Stratego.Game.player_ready(game, :blue)
 
-        Stratego.Game.move_piece(game, {1,9}, :up)
+        game = Stratego.Game.move_piece(game, {1,9}, :up)
         assert %{piece: :empty, controlled_by: :no_one}  === Stratego.Squares.get_square({1,9})
         assert %{piece: :marshal, controlled_by: :red}  === Stratego.Squares.get_square({2,9})
+
+        assert game === %Stratego.Game.State{game_state: :red_won, blue_team_state: :ready_to_play, red_team_state: :ready_to_play}
     end
     
 end
